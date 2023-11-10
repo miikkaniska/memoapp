@@ -13,6 +13,9 @@ import android.view.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.project.memoapp.databinding.ActivityMainBinding
 
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -20,17 +23,19 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var addNoteBtn : FloatingActionButton
 
+    //val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        //setContentView(binding.root)
+        setContentView(binding.root)
 
-        setContentView(R.layout.activity_note)
+        //setContentView(R.layout.activity_note)
 
-        //addNoteBtn = findViewById(R.id.add_note_btn)
+        addNoteBtn = findViewById(R.id.add_note_btn)
 
-        //addNoteBtn.setOnClickListener{ view -> startActivity(Intent(this, NoteActivity::class.java)).apply {  }}
+        addNoteBtn.setOnClickListener{ view -> startActivity(Intent(this, NoteActivity::class.java)).apply {  }}
     }
 }
+
