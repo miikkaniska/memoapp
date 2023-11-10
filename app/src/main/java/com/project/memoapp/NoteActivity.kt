@@ -43,12 +43,11 @@ class NoteActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
 
             val docData = hashMapOf(
-                "stringExample" to "Hello world!",
                 "Title" to title.text.toString(),
                 "Content" to content.text.toString(),
             )
 
-            db.collection("data").document("test")
+            db.collection("data").document(title.text.toString())
                 .set(docData)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
