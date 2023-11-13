@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var addNoteBtn : FloatingActionButton
 
-    //val db = Firebase.firestore
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
