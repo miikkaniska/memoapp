@@ -1,4 +1,6 @@
 package com.project.memoapp
+import java.text.SimpleDateFormat
+import java.util.Date
 
 data class MemoData(
     val nameOfMemo: String = "",
