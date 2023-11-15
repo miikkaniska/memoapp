@@ -8,6 +8,12 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="memo_text">Memo test text</string>
+    <!-- activity_note.xml strings -->
+    <string name="save_changes">Save changes</string>
+    <string name="notes_content_text">placeholder</string>
+    <string name="created_date_text">Save changes</string>
+    <string name="edited_date_text">Save changes</string>
+    <string name="memo_title">Title</string>
 
 
     <string name="lorem_ipsum">
