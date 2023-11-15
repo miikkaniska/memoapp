@@ -36,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         addNoteBtn = findViewById(R.id.add_note_btn)
 
         addNoteBtn.setOnClickListener{ view -> startActivity(Intent(this, NoteActivity::class.java)).apply {  }}
+
+        val intent = Intent(this, NewAccountActivity::class.java)
+        startActivity(intent)
     }
 }
 
