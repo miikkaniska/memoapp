@@ -6,16 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.project.memoapp.databinding.ActivityNoteBinding
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -29,8 +21,8 @@ class NoteActivity : AppCompatActivity() {
     private lateinit var content : EditText
 
     private lateinit var createdDate : TextView
-
     private lateinit var editedText : TextView
+    private lateinit var checkIfSharedText : TextView
 
     val db = Firebase.firestore
 
@@ -43,6 +35,7 @@ class NoteActivity : AppCompatActivity() {
         title = findViewById(R.id.memo_title)
         createdDate = findViewById(R.id.created_date_text)
         editedText = findViewById(R.id.edited_date_text)
+        checkIfSharedText = findViewById(R.id.check_shared_text)
         content = findViewById<EditText>(R.id.notes_content_text)
 
         saveNoteBtn = findViewById(R.id.save_note_btn)

@@ -50,7 +50,7 @@
             android:id="@+id/created_date_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="TextView"
+            android:text=""
             android:textColor="#FFE3E3E3"
             android:textSize="16sp" />
 
@@ -58,7 +58,7 @@
             android:id="@+id/edited_date_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text=""
             android:textColor="#FFE3E3E3"
             android:textSize="16sp" />
 
@@ -66,7 +66,7 @@
             android:id="@+id/check_shared_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text=""
             android:textColor="#E3E3E3"
             android:textSize="16sp" />
 
