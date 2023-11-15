@@ -6,15 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.project.memoapp.databinding.ActivityNoteBinding
-
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
@@ -56,7 +48,5 @@ class NoteActivity : AppCompatActivity() {
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
         }
     }
-
-
 
 }
