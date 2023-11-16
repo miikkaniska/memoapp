@@ -11,17 +11,21 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class NewAccountActivity : AppCompatActivity() {
 
+    // Initialize Firebase Variables
+
     private lateinit var auth: FirebaseAuth
 
-    // Initialize Firebase Auth
+    val db = Firebase.firestore
 
 
     private lateinit var createAccountButton : Button
 
     private lateinit var emailEditText : EditText
+    private lateinit var usernameEditText : EditText
     private lateinit var passwordEditText : EditText
     private lateinit var confirmPasswordEditText : EditText
 
@@ -32,13 +36,14 @@ class NewAccountActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         emailEditText = findViewById<EditText>(R.id.emailAddressText)
+        usernameEditText = findViewById<EditText>(R.id.usernameText)
         passwordEditText = findViewById<EditText>(R.id.passwordText)
         confirmPasswordEditText = findViewById<EditText>(R.id.confirmPasswordText)
 
         createAccountButton = findViewById(R.id.createAccountButton)
 
         createAccountButton.setOnClickListener{
-            createAccount(emailEditText.text.toString(), passwordEditText.text.toString(), confirmPasswordEditText.text.toString())
+            createAccount(emailEditText.text.toString(),usernameEditText.text.toString(), passwordEditText.text.toString(), confirmPasswordEditText.text.toString())
         }
     }
 
@@ -51,9 +56,9 @@ class NewAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun createAccount(email: String, password: String, confirmPassword: String) {
+    private fun createAccount(email: String,username: String, password: String, confirmPassword: String) {
         // [START create_user_with_email]
-        if(validateInput(email, password, confirmPassword)) {
+        if(validateInput(email,username, password, confirmPassword)) {
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -61,7 +66,8 @@ class NewAccountActivity : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "createUserWithEmail:success")
                         val user = auth.currentUser
-                        //User creation is successful -> Transfer to Memo View or whatever?
+                        addUserInfo(username)
+                        //User creation is successful -> Transfer to Main Notes View
                         setContentView(R.layout.fragment_second)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -85,7 +91,7 @@ class NewAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInput(email: String, password: String, confirmPassword: String) : Boolean
+    private fun validateInput(email: String, username: String, password: String, confirmPassword: String) : Boolean
     {
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
         {
@@ -104,8 +110,33 @@ class NewAccountActivity : AppCompatActivity() {
             passwordEditText.setError("Passwords don't match.")
             return false
         }
+        if(username.length < 4)
+        {
+            usernameEditText.setError("Username has to be at least 4 letters long.")
+            return false
+        }
         //If none of the previous checks fail, return true
         return true
+    }
+
+    private fun addUserInfo(username: String) {
+        val user = auth.currentUser
+        val uid = user!!.uid
+
+        val docData = hashMapOf(
+            "UID" to uid,
+            "email" to user.email,
+            "username" to username
+        )
+
+        db.collection("users").document(uid)
+            .set(docData)
+            .addOnSuccessListener {
+                Log.d(TAG, "User collection data successfully written!")
+            }
+            .addOnFailureListener {
+                    e -> Log.w(TAG, "Error writing document", e)
+            }
     }
 
 
