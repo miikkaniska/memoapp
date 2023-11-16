@@ -68,10 +68,15 @@ class NoteActivity : AppCompatActivity() {
 
                 for (document in result) {
                     // Käsittele dokumentti ja hae halutut tiedot
-                    val email = document.getString("email") ?: ""
-                    val nameOfMemo = document.getString("nameOfMemo") ?: ""
-                    val nickname = document.getString("nickname") ?: ""
-                    val isShared = document.getBoolean("isShared") ?: false
+                    val title = document.getString("title") ?: ""
+                    val content = document.getString("content") ?: ""
+                    val sharedWith = document.getString("sharedWith") ?: ""
+
+                    val shared : ArrayList<String> = arrayListOf()
+                    shared.add(sharedWith)
+                    //val isShared = document.getBoolean("isShared") ?: false
+
+                    val createdBy = document.getString("createdBy") ?: ""
 
                     val creationTime = if (document.contains("creationTime")) {
                         document.getLong("creationTime") ?: System.currentTimeMillis()
@@ -79,7 +84,13 @@ class NoteActivity : AppCompatActivity() {
                         System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
                     }
 
-                    val memo = MemoData(nameOfMemo, nickname, email, isShared, creationTime)
+                    val lastEdited = if (document.contains("lastEdited")) {
+                        document.getLong("lastEdited") ?: System.currentTimeMillis()
+                    } else {
+                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
+                    }
+
+                    val memo = MemoData(title, content, shared, creationTime, lastEdited)
                     data.add(memo)
                 }
             }

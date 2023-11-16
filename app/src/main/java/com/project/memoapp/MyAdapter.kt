@@ -29,7 +29,7 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
         private val cardView: CardView = itemView.findViewById(R.id.cardview_item)
 
         fun bind(memo: MemoData) {
-            val itemString = "Creation Time: ${memo.creationTime}\nEmail: ${memo.email}\nName of Memo: ${memo.title}\nNickname: ${memo.content}"
+            val itemString = "Creation Time: ${memo.creationTime}\nName of Memo: ${memo.title}\nMemo data: ${memo.content}"
             textView.text = itemString
 
             cardView.setOnClickListener {

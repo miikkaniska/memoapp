@@ -71,7 +71,7 @@ class FirstFragment : Fragment() {
                     } else {
                         System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
                     }
-                    val memo = MemoData(title, content, emptyList()/*CHANGE TO sharedWith when reading data is confirmed to be working*/, creationTime, lastEdited)
+                    val memo = MemoData(title, content, arrayListOf()/*CHANGE TO sharedWith when reading data is confirmed to be working*/, creationTime, lastEdited)
                     data.add(memo)
                 }
                 // Päivitä RecyclerView adapterin avulla
