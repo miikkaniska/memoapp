@@ -1,32 +1,42 @@
-package com.project.memoapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.project.memoapp.MemoData
+import com.project.memoapp.R
 
+class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyAdapter.MemoViewHolder>() {
 
-class MyAdapter(private val data: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
+        return MemoViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
-        holder.bind(item)
+    override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
+        val memo = memoList[position]
+        holder.bind(memo)
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return memoList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(R.id.item_textview)
+    inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textView: TextView = itemView.findViewById(R.id.textview_item)
+        private val cardView: CardView = itemView.findViewById(R.id.cardview_item)
 
-        fun bind(item: String) {
-            textView.text = item
+        fun bind(memo: MemoData) {
+            val itemString = "Creation Time: ${memo.creationTime}\nEmail: ${memo.email}\nName of Memo: ${memo.nameOfMemo}\nNickname: ${memo.nickname}"
+            textView.text = itemString
+
+            cardView.setOnClickListener {
+                // Siirry toiseen fragmenttiin tässä
+                val navController = Navigation.findNavController(itemView)
+                navController.navigate(R.id.action_FirstFragment_to_SecondFragment)
+            }
         }
     }
 }
