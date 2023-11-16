@@ -14,7 +14,9 @@
     <string name="created_date_text">Save changes</string>
     <string name="edited_date_text">Save changes</string>
     <string name="memo_title">Title</string>
-
+    <!-- fragment_second.xml strings -->
+    <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

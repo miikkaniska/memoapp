@@ -1,6 +1,7 @@
 package com.project.memoapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,13 +35,35 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Määritä painikkeelle toiminnallisuus
+        binding.toggleShare.setOnCheckedChangeListener { _, isChecked ->
+            //used in testing phase to check swicth state changes, remove later
+            Log.d("SwitchState", "Switch state changed to: $isChecked")
+
+            // Update the visibility of textViewNickname based on the switch state
+            binding.textviewNickname.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.editTextPerson.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.textviewEmail.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.editTextEmail.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.btnAdd.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
         binding.btnAdd.setOnClickListener {
+
+        }
+
+        // Määritä painikkeelle toiminnallisuus
+        binding.btnConfirm.setOnClickListener {
             // Hae syötteet käyttäjältä
             val nameOfMemo = binding.nameOfMemo.text.toString()
             val nickname = binding.editTextPerson.text.toString()
             val email = binding.editTextEmail.text.toString()
-            val shareEnabled = binding.switch1.isChecked
+            val shareEnabled = binding.toggleShare.isChecked
+
+            if(nameOfMemo.isEmpty()){
+                binding.nameOfMemo.setError("Memo name can not be empty.")
+                Toast.makeText(requireContext(), "Memo name can not be empty.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             // Luo Firebase-tietokantaan tallennettava olio
             val memoData = MemoData(nameOfMemo, nickname, email, shareEnabled)
@@ -60,6 +83,10 @@ class SecondFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Dataa ei tallennettu, koska 'Share' on pois päältä", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         //binding.buttonSecond.setOnClickListener {
