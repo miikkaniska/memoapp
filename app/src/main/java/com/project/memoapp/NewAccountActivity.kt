@@ -68,7 +68,7 @@ class NewAccountActivity : AppCompatActivity() {
                         val user = auth.currentUser
                         addUserInfo(username)
                         //User creation is successful -> Transfer to Main Notes View
-                        setContentView(R.layout.fragment_second)
+                        setContentView(R.layout.fragment_first)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
