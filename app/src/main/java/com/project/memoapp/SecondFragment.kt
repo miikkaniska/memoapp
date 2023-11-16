@@ -42,12 +42,22 @@ class SecondFragment : Fragment() {
             // Update the visibility of textViewNickname based on the switch state
             binding.textviewNickname.visibility = if (isChecked) View.VISIBLE else View.GONE
             binding.editTextPerson.visibility = if (isChecked) View.VISIBLE else View.GONE
-            binding.textviewEmail.visibility = if (isChecked) View.VISIBLE else View.GONE
-            binding.editTextEmail.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.btnAdd.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.textviewShared.visibility = if (isChecked) View.VISIBLE else View.GONE
             binding.btnAdd.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
         binding.btnAdd.setOnClickListener {
+            if(binding.editTextPerson.text.isEmpty()){
+                binding.editTextPerson.setError("Name can not be empty.")
+                Toast.makeText(requireContext(), "Please fill every field.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else{
+                binding.textviewShared.visibility = View.VISIBLE
+                binding.textviewNicknameList.visibility = View.VISIBLE
+                binding.textviewNicknameList.text = "${binding.textviewNicknameList.text}\n${binding.editTextPerson.text}"
+            }
 
         }
 
@@ -81,6 +91,7 @@ class SecondFragment : Fragment() {
                         Toast.makeText(requireContext(), "Tallennuksessa tapahtui virhe: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
             } else {
+                memosCollection.add(memoData)
                 Toast.makeText(requireContext(), "Dataa ei tallennettu, koska 'Share' on pois päältä", Toast.LENGTH_SHORT).show()
             }
         }
