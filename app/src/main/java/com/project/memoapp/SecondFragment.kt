@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.project.memoapp.databinding.FragmentSecondBinding
 
@@ -22,6 +23,8 @@ class SecondFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     val db = Firebase.firestore
+
+    val auth = Firebase.auth
 
 
     override fun onCreateView(
@@ -64,36 +67,31 @@ class SecondFragment : Fragment() {
         // Määritä painikkeelle toiminnallisuus
         binding.btnConfirm.setOnClickListener {
             // Hae syötteet käyttäjältä
-            val nameOfMemo = binding.nameOfMemo.text.toString()
+            val title = binding.nameOfMemo.text.toString()
             val nickname = binding.editTextPerson.text.toString()
-            val email = binding.editTextEmail.text.toString()
-            val shareEnabled = binding.toggleShare.isChecked
+            val sharedWith : ArrayList<String> = arrayListOf()
+            sharedWith.add(binding.editTextPerson.text.toString())
 
-            if(nameOfMemo.isEmpty()){
+            if(title.isEmpty()){
                 binding.nameOfMemo.setError("Memo name can not be empty.")
                 Toast.makeText(requireContext(), "Memo name can not be empty.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             // Luo Firebase-tietokantaan tallennettava olio
-            val memoData = MemoData(nameOfMemo, nickname, email, shareEnabled)
+            val memoData = MemoData(title, "", sharedWith, System.currentTimeMillis(), System.currentTimeMillis(), auth.currentUser!!.uid )
 
             // Hae "memos" -kokoelma Firestoresta
             val memosCollection = db.collection("memos")
 
-            // Tallenna tietokantaan, jos "Share" on päällä
-            if (shareEnabled) {
-                memosCollection.add(memoData)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Data tallennettu Firestoreen", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(requireContext(), "Tallennuksessa tapahtui virhe: ${it.message}", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-                memosCollection.add(memoData)
-                Toast.makeText(requireContext(), "Dataa ei tallennettu, koska 'Share' on pois päältä", Toast.LENGTH_SHORT).show()
-            }
+            // Tallenna tietokantaan
+            memosCollection.add(memoData)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Data tallennettu Firestoreen", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Tallennuksessa tapahtui virhe: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
         }
 
         binding.btnCancel.setOnClickListener {

@@ -2,15 +2,16 @@ package com.project.memoapp
 
 import MyAdapter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.project.memoapp.databinding.FragmentFirstBinding
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.project.memoapp.databinding.FragmentFirstBinding
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -54,17 +55,23 @@ class FirstFragment : Fragment() {
 
                 for (document in result) {
                     // Käsittele dokumentti ja hae halutut tiedot
-                    val email = document.getString("email") ?: ""
-                    val nameOfMemo = document.getString("nameOfMemo") ?: ""
-                    val nickname = document.getString("nickname") ?: ""
-                    val isShared = document.getBoolean("isShared") ?: false
+                    val title = document.getString("title") ?: ""
+                    val content = document.getString("content") ?: ""
+
+                    val sharedWith = document.get("sharedWith") //as? List<String>
 
                     val creationTime = if (document.contains("creationTime")) {
                         document.getLong("creationTime") ?: System.currentTimeMillis()
                     } else {
                         System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
                     }
-                    val memo = MemoData(nameOfMemo, nickname, email, isShared, creationTime)
+
+                    val lastEdited = if(document.contains("lastEdited")) {
+                        document.getLong("lastEdited") ?: System.currentTimeMillis()
+                    } else {
+                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
+                    }
+                    val memo = MemoData(title, content, emptyList()/*CHANGE TO sharedWith when reading data is confirmed to be working*/, creationTime, lastEdited)
                     data.add(memo)
                 }
                 // Päivitä RecyclerView adapterin avulla
