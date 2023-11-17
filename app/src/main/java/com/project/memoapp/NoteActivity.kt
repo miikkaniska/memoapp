@@ -1,5 +1,6 @@
 package com.project.memoapp
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -42,7 +43,7 @@ class NoteActivity : AppCompatActivity() {
 
         saveNoteBtn.setOnClickListener{
             //view -> startActivity(Intent(this, MainActivity::class.java)).apply {  }
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MemoView::class.java)
 
             val docData = hashMapOf(
                 "Title" to title.text.toString(),
@@ -70,11 +71,16 @@ class NoteActivity : AppCompatActivity() {
                     // Käsittele dokumentti ja hae halutut tiedot
                     val title = document.getString("title") ?: ""
                     val content = document.getString("content") ?: ""
-                    val sharedWith = document.getString("sharedWith") ?: ""
-
-                    val shared : ArrayList<String> = arrayListOf()
-                    shared.add(sharedWith)
-                    //val isShared = document.getBoolean("isShared") ?: false
+                    var sharedWith = arrayListOf("")
+                    val tempData = document.get("sharedWith")
+                    if(tempData != null){
+                        Log.d(ContentValues.TAG, "sharedWith content: " + tempData.toString())
+                        var x = tempData as ArrayList<String>
+                        for(i in x)
+                        {
+                            sharedWith.add(i)
+                        }
+                    }
 
                     val createdBy = document.getString("createdBy") ?: ""
 
@@ -90,11 +96,9 @@ class NoteActivity : AppCompatActivity() {
                         System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
                     }
 
-                    val memo = MemoData(title, content, shared, creationTime, lastEdited)
+                    val memo = MemoData(title, content, sharedWith, creationTime, lastEdited)
                     data.add(memo)
                 }
             }
     }
-
-
 }

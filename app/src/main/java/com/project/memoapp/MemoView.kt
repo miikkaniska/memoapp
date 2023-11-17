@@ -2,21 +2,15 @@ package com.project.memoapp
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.project.memoapp.databinding.ActivityMainBinding
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
-class MainActivity : AppCompatActivity() {
+class MemoView : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
