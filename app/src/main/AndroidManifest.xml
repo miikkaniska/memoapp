@@ -17,11 +17,11 @@
             android:exported="true"
             android:label="FirstActivity"
             android:theme="@style/Theme.MemoApp">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity
@@ -39,6 +39,17 @@
             android:exported="true"
             android:label="@string/title_activity_note"
             android:theme="@style/Theme.MemoApp">
+        </activity>
+        <activity
+            android:name=".CreateMemoActivity"
+            android:exported="true"
+            android:label="CreateMemoActivity"
+            android:theme="@style/Theme.MemoApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MemoView"
