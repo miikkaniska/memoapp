@@ -1,6 +1,7 @@
 package com.project.memoapp
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -12,11 +13,12 @@ import com.google.firebase.Firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-
+    val db = Firebase.firestore
     private lateinit var loginButton : Button
 
     private lateinit var loginEmailEditText : EditText
@@ -48,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(TAG, "signInWithEmail:success")
                         val user = auth.currentUser
                         //MOVE TO MAIN MEMO VIEW FROM HERE, LOGIN WAS A SUCCESS
-                        setContentView(R.layout.fragment_second)
+                        loginSuccessful()
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -87,5 +89,46 @@ class LoginActivity : AppCompatActivity() {
         }
         //If none of the previous checks fail, return true
         return true
+    }
+
+    private fun loginSuccessful()
+    {
+        val currentUserUid = auth.currentUser!!.uid
+        //Make sure the uid is not empty before attempting to query db
+        if(currentUserUid.isNotEmpty()) {
+            // Reference to the "users" collection
+            val userCollection = db.collection("users")
+            // Query the document with the current user's UID
+            val userDocument = userCollection.document(currentUserUid)
+
+            userDocument.get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        // Document exists, check the "username" field
+                        val userUid = documentSnapshot.getString("UID")
+
+                        // Check if the "username" field contains the desired value
+                        if (currentUserUid == userUid) {
+                            // The document is the current user's
+                            val username = documentSnapshot.getString("username")
+                            val email = documentSnapshot.getString("email")
+                            val intent = Intent(this, FirstActivity::class.java)
+                            //Pass extra intent info (the username for the current user for later use)
+                            //intent.putExtra("USERNAME_EXTRA", username)
+                            UserManager.getInstance().setUserDetails(username, currentUserUid, email, "")
+                            startActivity(intent)
+                        } else {
+                            // The document exists, but the username doesn't match
+                            Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // Document doesn't exist
+                        Toast.makeText(this, "Document not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle failures, such as network errors or permission issues
+            }
+        }
     }
 }

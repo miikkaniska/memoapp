@@ -26,13 +26,18 @@
 
         <activity
             android:name=".NewAccountActivity"
-            android:exported="false" />
+            android:exported="true" />
         <!--line 24 was previously set to false-->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.MemoApp" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".NoteActivity"
@@ -45,11 +50,6 @@
             android:exported="true"
             android:label="CreateMemoActivity"
             android:theme="@style/Theme.MemoApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MemoView"

@@ -68,49 +68,55 @@ class CreateMemoActivity : AppCompatActivity() {
                 usernameTextView.visibility = View.VISIBLE
                 sharedTextView.text = "${sharedTextView.text}\n${usernameEditText.text}"
             }
+        }
 
-            buttonConfirm.setOnClickListener {
-                val memoTitle = titleEditText.text.toString()
-                val username = usernameEditText.text.toString()
-                val sharedWith = sharedTextView.text.toString()
+        buttonCancel.setOnClickListener {
+            val intent = Intent(this, FirstActivity::class.java)
+            startActivity(intent)
+        }
 
-                if (memoTitle.isEmpty()) {
-                    titleEditText.setError("Memo name can't be empty.")
-                    Toast.makeText(this, "Memo name can't be empty.", Toast.LENGTH_SHORT).show()
+        buttonConfirm.setOnClickListener {
+            val memoTitle = titleEditText.text.toString()
+            val username = usernameEditText.text.toString()
+            val sharedWith = sharedTextView.text.toString()
+
+            if (memoTitle.isEmpty()) {
+                titleEditText.setError("Memo name can't be empty.")
+                Toast.makeText(this, "Memo name can't be empty.", Toast.LENGTH_SHORT).show()
+            }
+
+            val userManager = UserManager.getInstance()
+
+            // Luo Firebase-tietokantaan tallennettava olio
+            val memoData = MemoData(
+                memoTitle,
+                "", /*sharedWith*/
+                arrayListOf(),
+                System.currentTimeMillis(),
+                System.currentTimeMillis(),
+                userManager.getUsername().toString()
+            )
+
+
+            // Hae "memos" -kokoelma Firestoresta
+
+            val memosCollection = db.collection("memos").document(userManager.getUid().toString()).collection("userMemos").document(titleEditText.text.toString())
+
+            // Tallenna tietokantaan
+            memosCollection.set(memoData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Data tallennettu Firestoreen", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, FirstActivity::class.java)
+
+                    startActivity(intent)
                 }
-
-                // Luo Firebase-tietokantaan tallennettava olio
-                val memoData = MemoData(
-                    memoTitle,
-                    "", /*sharedWith*/
-                    arrayListOf(),
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis(),
-                    auth.currentUser!!.uid
-                )
-
-                // Hae "memos" -kokoelma Firestoresta
-                val memosCollection = db.collection("memos")
-
-                // Tallenna tietokantaan
-                memosCollection.add(memoData)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Data tallennettu Firestoreen", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            this,
-                            "Tallennuksessa tapahtui virhe: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            }
-
-            buttonCancel.setOnClickListener {
-                val intent = Intent(this, FirstActivity::class.java)
-                startActivity(intent)
-            }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Tallennuksessa tapahtui virhe: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         }
     }
 }

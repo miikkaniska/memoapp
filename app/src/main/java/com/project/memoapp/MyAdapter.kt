@@ -1,8 +1,10 @@
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.Navigation
@@ -11,6 +13,7 @@ import com.project.memoapp.MemoData
 import com.project.memoapp.NewAccountActivity
 import com.project.memoapp.NoteActivity
 import com.project.memoapp.R
+import com.project.memoapp.UserManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,7 +27,8 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memo = memoList[position]
-        holder.bind(memo)
+
+        holder.bind(memo, position)
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +39,7 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
         private val textView: TextView = itemView.findViewById(R.id.textview_item)
         private val cardView: CardView = itemView.findViewById(R.id.cardview_item)
 
-        fun bind(memo: MemoData) {
+        fun bind(memo: MemoData, position: Int) {
             var tempShared : String = ""
             for(i in memo.sharedWith.indices)
             {
@@ -52,9 +56,15 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
             textView.text = itemString
 
             cardView.setOnClickListener {
-                // Siirry toiseen fragmenttiin tässä
+                // Move to memo editing view
                 val intent = Intent(itemView.context, NoteActivity::class.java)
-                intent.putExtra("memo_id", "memo_id")
+                //intent.putExtra("memo_id", "memo_id")
+
+                //Set current document ID when moving to note editing activity
+                val tempSnapshot = UserManager.getInstance().getCurrentSnapshot()
+                val tempDocumentID : String = tempSnapshot!!.documents[position].id
+                UserManager.getInstance().setCurrentDocumentID(tempDocumentID)
+                Log.w("TESTING", "Current DocumentID: $tempDocumentID")
                 itemView.context.startActivity(intent)
             }
         }

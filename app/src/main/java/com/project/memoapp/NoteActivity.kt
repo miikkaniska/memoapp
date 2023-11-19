@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
 
 class NoteActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class NoteActivity : AppCompatActivity() {
 
     val db = Firebase.firestore
 
+    private var documentSnapshot: DocumentSnapshot? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +45,28 @@ class NoteActivity : AppCompatActivity() {
 
         saveNoteBtn.setOnClickListener{
             //view -> startActivity(Intent(this, MainActivity::class.java)).apply {  }
-            val intent = Intent(this, MemoView::class.java)
+            val intent = Intent(this, FirstActivity::class.java)
 
+            /*
             val docData = hashMapOf(
-                "Title" to title.text.toString(),
-                "Content" to content.text.toString(),
+                "title" to title.text.toString(),
+                "content" to content.text.toString(),
+            )
+            */
+            val updates = hashMapOf<String, Any>(
+                "title" to title.text.toString(),
+                "content" to content.text.toString()
             )
 
+            val tempReference = documentSnapshot!!.reference
+
+            tempReference.update(updates)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+                    startActivity(intent)
+                }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            /*
             db.collection("data").document(title.text.toString())
                 .set(docData)
                 .addOnSuccessListener {
@@ -57,8 +74,29 @@ class NoteActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            */
         }
-        getFirebaseData()
+        //getFirebaseData()
+
+        initializeNote()
+    }
+
+    private fun initializeNote()
+    {
+        val userManager = UserManager.getInstance()
+        val tempID = userManager.getCurrentDocumentID()
+        val tempSnapshot = userManager.getCurrentSnapshot()
+
+        for (documentSnapshot in tempSnapshot!!.documents) {
+            if (documentSnapshot.id == tempID) {
+                // Found the document with the matching ID
+                this.documentSnapshot = documentSnapshot
+                break // Break out of the loop since we found the document
+            }
+        }
+
+        title.text = documentSnapshot!!.getString("title")
+        content.setText(documentSnapshot!!.getString("content"))
     }
 
     private fun getFirebaseData() {

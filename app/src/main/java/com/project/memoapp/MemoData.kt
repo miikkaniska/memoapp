@@ -6,5 +6,5 @@ data class MemoData(
     val sharedWith: ArrayList<String> = arrayListOf("123"),
     val creationTime: Long = 0,
     val lastEdited: Long = 0,
-    val createdBy: String = ""
+    val owner: String = ""
 )

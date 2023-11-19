@@ -12,8 +12,6 @@ import com.google.firebase.firestore.firestore
 
 class MemoView : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
 
     private lateinit var addNoteBtn : FloatingActionButton
 
@@ -22,8 +20,8 @@ class MemoView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
+
 
         //setContentView(R.layout.activity_note)
 
@@ -31,8 +29,8 @@ class MemoView : AppCompatActivity() {
 
         addNoteBtn.setOnClickListener{ view -> startActivity(Intent(this, NoteActivity::class.java)).apply {  }}
 
-        val intent = Intent(this, NewAccountActivity::class.java)
-        startActivity(intent)
+        //val intent = Intent(this, NewAccountActivity::class.java)
+        //startActivity(intent)
     }
 }
 
