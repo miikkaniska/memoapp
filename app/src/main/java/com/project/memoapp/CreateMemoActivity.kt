@@ -34,6 +34,8 @@ class CreateMemoActivity : AppCompatActivity() {
     private lateinit var sharedTextView: TextView
     private lateinit var sharedUsernameListTextView: TextView
 
+    private var sharedUsersList: ArrayList<String> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_memo)
@@ -67,6 +69,8 @@ class CreateMemoActivity : AppCompatActivity() {
                 sharedTextView.visibility = View.VISIBLE
                 usernameTextView.visibility = View.VISIBLE
                 sharedTextView.text = "${sharedTextView.text}\n${usernameEditText.text}"
+
+                sharedUsersList.add(usernameEditText.text.toString())
             }
         }
 
@@ -89,8 +93,8 @@ class CreateMemoActivity : AppCompatActivity() {
             // Luo Firebase-tietokantaan tallennettava olio
             val memoData = MemoData(
                 memoTitle,
-                "", /*sharedWith*/
-                arrayListOf(),
+                "",
+                this.sharedUsersList,
                 System.currentTimeMillis(),
                 System.currentTimeMillis(),
                 userManager.getUsername().toString()
