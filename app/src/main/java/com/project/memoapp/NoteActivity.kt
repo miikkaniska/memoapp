@@ -85,8 +85,20 @@ class NoteActivity : AppCompatActivity() {
     {
         val userManager = UserManager.getInstance()
         val tempID = userManager.getCurrentDocumentID()
+        val tempDocuments = userManager.getDocumentSnapshotList()
         val tempSnapshot = userManager.getCurrentSnapshot()
 
+        if (tempDocuments != null) {
+            for (documentSnapshot in tempDocuments) {
+                if (documentSnapshot.id == tempID) {
+                    // Found the document with the matching ID
+                    this.documentSnapshot = documentSnapshot
+                    break // Break out of the loop since we found the document
+                }
+            }
+        }
+
+/*
         for (documentSnapshot in tempSnapshot!!.documents) {
             if (documentSnapshot.id == tempID) {
                 // Found the document with the matching ID
@@ -94,7 +106,7 @@ class NoteActivity : AppCompatActivity() {
                 break // Break out of the loop since we found the document
             }
         }
-
+*/
         title.text = documentSnapshot!!.getString("title")
         content.setText(documentSnapshot!!.getString("content"))
     }

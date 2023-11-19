@@ -1,5 +1,6 @@
 package com.project.memoapp
 
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 
 class UserManager private constructor() {
@@ -9,6 +10,8 @@ class UserManager private constructor() {
     private var email: String? = null
     private var currentDocumentID: String? = null
     private var currentSnapshot: QuerySnapshot? = null
+    private var documentSnapshotList: ArrayList<DocumentSnapshot>? = null
+
 
     companion object {
         @Volatile
@@ -49,6 +52,10 @@ class UserManager private constructor() {
         this.currentSnapshot = currentSnapshot
     }
 
+    fun setDocumentSnapshotList(documentSnapshotList: ArrayList<DocumentSnapshot>?) {
+        this.documentSnapshotList = documentSnapshotList
+    }
+
     fun getUsername(): String? {
         return username
     }
@@ -67,5 +74,9 @@ class UserManager private constructor() {
 
     fun getCurrentSnapshot(): QuerySnapshot? {
         return currentSnapshot
+    }
+
+    fun getDocumentSnapshotList(): ArrayList<DocumentSnapshot>? {
+        return documentSnapshotList
     }
 }

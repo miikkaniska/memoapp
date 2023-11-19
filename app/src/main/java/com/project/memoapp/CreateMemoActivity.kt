@@ -100,7 +100,7 @@ class CreateMemoActivity : AppCompatActivity() {
 
             // Hae "memos" -kokoelma Firestoresta
 
-            val memosCollection = db.collection("memos").document(userManager.getUid().toString()).collection("userMemos").document(titleEditText.text.toString())
+            val memosCollection = db.collection("memos").document(userManager.getUid().toString()).collection("userMemos").document()
 
             // Tallenna tietokantaan
             memosCollection.set(memoData)

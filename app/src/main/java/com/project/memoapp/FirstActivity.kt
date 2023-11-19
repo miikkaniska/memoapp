@@ -13,7 +13,9 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.flow.combine
 
 //testing if changing from fragment to activity fixes problems with changing
 class FirstActivity : AppCompatActivity() {
@@ -74,11 +76,6 @@ class FirstActivity : AppCompatActivity() {
 
     private fun fetchDataFromFirestore() {
 
-        //val query = db.collectionGroup("test memo")
-        //    .whereEqualTo("owner", UserManager.getInstance().getUsername())
-
-        //7query.get()
-        //    .addOnSuccessListener { result ->
         db.collectionGroup("memos")
             .get()
             .addOnSuccessListener { result ->
@@ -133,22 +130,20 @@ class FirstActivity : AppCompatActivity() {
         val sharedWithQuery = db.collectionGroup("userMemos")
             .whereArrayContains("sharedWith", currentUserName)
 
-        val combinedList = mutableListOf<DocumentSnapshot>()
+        val combinedList = ArrayList<DocumentSnapshot>()
 
         ownerQuery.get().addOnSuccessListener { ownerQuerySnapshot ->
             combinedList.addAll(ownerQuerySnapshot.documents)
 
-
-
             sharedWithQuery.get().addOnSuccessListener { sharedWithQuerySnapshot ->
                 combinedList.addAll(sharedWithQuerySnapshot.documents)
 
+                Log.w("DOCUMENT AMOUNT", "CombinedList size: ${combinedList.size}")
                 val data: MutableList<MemoData> = mutableListOf()
                 // Process the combinedList containing documents from both queries
                 for (document in combinedList) {
                     val docData = document.data
                     // Process the data as needed
-                    // Käsittele dokumentti ja hae halutut tiedot
                     val title = document.getString("title") ?: ""
                     val content = document.getString("content") ?: ""
 
@@ -174,62 +169,20 @@ class FirstActivity : AppCompatActivity() {
                     } else {
                         System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
                     }
-                    val memo = MemoData(title, content, sharedWith/*CHANGE TO sharedWith when reading data is confirmed to be working*/, creationTime, lastEdited)
+                    val memo = MemoData(title, content, sharedWith, creationTime, lastEdited)
                     data.add(memo)
 
                 }
+                UserManager.getInstance().setDocumentSnapshotList(combinedList)
                 adapter = MyAdapter(data)
                 recyclerView.adapter = adapter
             }.addOnFailureListener { exception ->
+                Log.e("Query Error", "Querying for sharedWith data failed!")
                 // Handle errors for sharedWithQuery
             }
         }.addOnFailureListener { exception ->
             // Handle errors for ownerQuery
+            Log.e("Query Error", "Querying for owner data failed!")
         }
-
-        db.collectionGroup("userMemos")
-            .whereEqualTo("owner", UserManager.getInstance().getUsername())
-            .get()
-            .addOnSuccessListener { result ->
-                val data: MutableList<MemoData> = mutableListOf()
-
-                UserManager.getInstance().setCurrentSnapshot(result)
-
-                for (document in result) {
-                    // Käsittele dokumentti ja hae halutut tiedot
-                    val title = document.getString("title") ?: ""
-                    val content = document.getString("content") ?: ""
-
-                    var sharedWith = arrayListOf("")
-                    val tempData = document.get("sharedWith")
-                    if(tempData != null){
-                        Log.d(ContentValues.TAG, "sharedWith content: " + tempData.toString())
-                        var x = tempData as ArrayList<String>
-                        for(i in x)
-                        {
-                            sharedWith.add(i)
-                        }
-                    }
-
-                    val creationTime = if (document.contains("creationTime")) {
-                        document.getLong("creationTime") ?: System.currentTimeMillis()
-                    } else {
-                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
-                    }
-
-                    val lastEdited = if(document.contains("lastEdited")) {
-                        document.getLong("lastEdited") ?: System.currentTimeMillis()
-                    } else {
-                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
-                    }
-                    val memo = MemoData(title, content, sharedWith/*CHANGE TO sharedWith when reading data is confirmed to be working*/, creationTime, lastEdited)
-                    data.add(memo)
-                }
-                // Päivitä RecyclerView adapterin avulla
-                adapter = MyAdapter(data)
-                recyclerView.adapter = adapter
-            }
-
-
     }
 }

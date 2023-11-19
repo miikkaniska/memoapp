@@ -61,8 +61,9 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
                 //intent.putExtra("memo_id", "memo_id")
 
                 //Set current document ID when moving to note editing activity
-                val tempSnapshot = UserManager.getInstance().getCurrentSnapshot()
-                val tempDocumentID : String = tempSnapshot!!.documents[position].id
+                //val tempSnapshot = UserManager.getInstance().getCurrentSnapshot()
+                val tempDocuments = UserManager.getInstance().getDocumentSnapshotList()
+                val tempDocumentID : String = tempDocuments?.get(position)!!.id//String = tempSnapshot!!.documents[position].id
                 UserManager.getInstance().setCurrentDocumentID(tempDocumentID)
                 Log.w("TESTING", "Current DocumentID: $tempDocumentID")
                 itemView.context.startActivity(intent)
