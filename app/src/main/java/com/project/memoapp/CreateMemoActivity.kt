@@ -110,8 +110,6 @@ class CreateMemoActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Toast.makeText(this, "Data tallennettu Firestoreen", Toast.LENGTH_SHORT).show()
                     onBackPressed()
-
-                    startActivity(intent)
                 }
                 .addOnFailureListener {
                     Toast.makeText(

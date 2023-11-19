@@ -20,6 +20,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     val db = Firebase.firestore
     private lateinit var loginButton : Button
+    private lateinit var createAccButton : Button
 
     private lateinit var loginEmailEditText : EditText
     private lateinit var loginPasswordEditText : EditText
@@ -34,9 +35,15 @@ class LoginActivity : AppCompatActivity() {
         loginPasswordEditText = findViewById<EditText>(R.id.loginPasswordText)
 
         loginButton = findViewById(R.id.loginButton)
+        createAccButton = findViewById(R.id.createAccButton)
 
         loginButton.setOnClickListener{
             signIn(loginEmailEditText.text.toString(), loginPasswordEditText.text.toString())
+        }
+
+        createAccButton.setOnClickListener {
+            val intent = Intent(this, NewAccountActivity::class.java)
+            startActivity(intent)
         }
     }
 
