@@ -45,7 +45,6 @@ class NoteActivity : AppCompatActivity() {
 
         saveNoteBtn.setOnClickListener{
             //view -> startActivity(Intent(this, MainActivity::class.java)).apply {  }
-            val intent = Intent(this, FirstActivity::class.java)
 
             /*
             val docData = hashMapOf(
@@ -63,7 +62,7 @@ class NoteActivity : AppCompatActivity() {
             tempReference.update(updates)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
-                    startActivity(intent)
+                    onBackPressed()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
             /*

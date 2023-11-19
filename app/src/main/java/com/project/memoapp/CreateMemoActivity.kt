@@ -71,8 +71,7 @@ class CreateMemoActivity : AppCompatActivity() {
         }
 
         buttonCancel.setOnClickListener {
-            val intent = Intent(this, FirstActivity::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
 
         buttonConfirm.setOnClickListener {
@@ -106,7 +105,7 @@ class CreateMemoActivity : AppCompatActivity() {
             memosCollection.set(memoData)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Data tallennettu Firestoreen", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, FirstActivity::class.java)
+                    onBackPressed()
 
                     startActivity(intent)
                 }
