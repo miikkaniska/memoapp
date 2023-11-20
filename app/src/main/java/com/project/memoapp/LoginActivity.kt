@@ -123,6 +123,7 @@ class LoginActivity : AppCompatActivity() {
                             //Pass extra intent info (the username for the current user for later use)
                             //intent.putExtra("USERNAME_EXTRA", username)
                             UserManager.getInstance().setUserDetails(username, currentUserUid, email, "")
+                            Toast.makeText(this, "Hello, " + username, Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                         } else {
                             // The document exists, but the username doesn't match

@@ -86,6 +86,7 @@ class CreateMemoActivity : AppCompatActivity() {
             if (memoTitle.isEmpty()) {
                 titleEditText.setError("Memo name can't be empty.")
                 Toast.makeText(this, "Memo name can't be empty.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
             val userManager = UserManager.getInstance()

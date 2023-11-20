@@ -48,7 +48,7 @@ class FirstActivity : AppCompatActivity() {
 
         if (username != null) {
             // Do something with the username, e.g., display it in a TextView
-            Toast.makeText(this, "Hello, " + username, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Hello, " + username, Toast.LENGTH_SHORT).show()
         } else {
             // Handle the case where the username is not found
             // This may happen if the intent doesn't have the expected extra
@@ -61,8 +61,6 @@ class FirstActivity : AppCompatActivity() {
         newMemoButton.setOnClickListener {
             // Actions to perform when the button is clicked
             // For example, you can navigate to a new activity
-            val intent = Intent(this, CreateMemoActivity::class.java)
-            startActivity(intent)
 
             // Or you can perform other tasks based on your application logic
             // For instance, displaying a Toast message
@@ -72,6 +70,12 @@ class FirstActivity : AppCompatActivity() {
         }
 
         getUserMemos()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, CreateMemoActivity::class.java)
+        finish()
+        startActivity(intent)
     }
 
     private fun fetchDataFromFirestore() {
