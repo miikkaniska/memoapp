@@ -119,7 +119,7 @@ class NoteActivity : AppCompatActivity() {
                     }
                     else
                     {
-                        deleteBtn.visibility = View.GONE
+                        deleteBtn.visibility = View.INVISIBLE
                     }
                     break // Break out of the loop since we found the document
                 }
