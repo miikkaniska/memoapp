@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -112,6 +113,14 @@ class NoteActivity : AppCompatActivity() {
                 if (documentSnapshot.id == tempID) {
                     // Found the document with the matching ID
                     this.documentSnapshot = documentSnapshot
+                    if(userManager.getUsername() == documentSnapshot.getString("owner"))
+                    {
+                        deleteBtn.visibility = View.VISIBLE
+                    }
+                    else
+                    {
+                        deleteBtn.visibility = View.GONE
+                    }
                     break // Break out of the loop since we found the document
                 }
             }
