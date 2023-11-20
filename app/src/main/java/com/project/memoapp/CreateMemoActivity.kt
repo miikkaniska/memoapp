@@ -120,6 +120,12 @@ class CreateMemoActivity : AppCompatActivity() {
                 }
         }
     }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, FirstActivity::class.java)
+        finish()
+        startActivity(intent)
+    }
 }
 
 

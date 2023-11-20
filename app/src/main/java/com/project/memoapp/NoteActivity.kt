@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
@@ -45,7 +46,20 @@ class NoteActivity : AppCompatActivity() {
         deleteBtn = findViewById(R.id.delete_btn)
 
         deleteBtn.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+                .setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this note")
+                .setPositiveButton("Yes") { _, _ ->
+                    // User confirmed, so allow the default behavior
+                    deleteNote()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    // User canceled, so dismiss the dialog
+                    dialog.dismiss()
+                }
+                .create()
 
+            alertDialog.show()
         }
 
         saveNoteBtn.setOnClickListener{
@@ -68,9 +82,7 @@ class NoteActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
                     Log.d(TAG, "Updated Values - Title: ${title.text}, Content: ${content.text}")
-                    val intent = Intent(this, FirstActivity::class.java)
-                    finish()
-                    startActivity(intent)
+                    onBackPressed()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
             /*
@@ -116,6 +128,27 @@ class NoteActivity : AppCompatActivity() {
 */
         title.text = documentSnapshot!!.getString("title")
         content.setText(documentSnapshot!!.getString("content"))
+    }
+
+    override fun onBackPressed() {
+        // Show a custom dialog or perform some other action
+        val intent = Intent(this, FirstActivity::class.java)
+        finish()
+        startActivity(intent)
+
+        // If you want to call the default behavior after your custom logic, uncomment the next line
+        // super.onBackPressed()
+    }
+
+    private fun deleteNote() {
+        val tempReference = documentSnapshot!!.reference
+
+        tempReference.delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                onBackPressed()
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
    /* private fun getFirebaseData() {
