@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
@@ -17,6 +16,7 @@ import com.google.firebase.firestore.firestore
 class NoteActivity : AppCompatActivity() {
 
     private lateinit var saveNoteBtn : Button
+    private lateinit var deleteBtn : Button
 
     private lateinit var title : TextView
 
@@ -42,6 +42,11 @@ class NoteActivity : AppCompatActivity() {
         content = findViewById<EditText>(R.id.notes_content_text)
 
         saveNoteBtn = findViewById(R.id.save_note_btn)
+        deleteBtn = findViewById(R.id.delete_btn)
+
+        deleteBtn.setOnClickListener {
+
+        }
 
         saveNoteBtn.setOnClickListener{
             //view -> startActivity(Intent(this, MainActivity::class.java)).apply {  }
@@ -62,7 +67,10 @@ class NoteActivity : AppCompatActivity() {
             tempReference.update(updates)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
-                    onBackPressed()
+                    Log.d(TAG, "Updated Values - Title: ${title.text}, Content: ${content.text}")
+                    val intent = Intent(this, FirstActivity::class.java)
+                    finish()
+                    startActivity(intent)
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
             /*
@@ -110,7 +118,7 @@ class NoteActivity : AppCompatActivity() {
         content.setText(documentSnapshot!!.getString("content"))
     }
 
-    private fun getFirebaseData() {
+   /* private fun getFirebaseData() {
         db.collection("memos")
             .get()
             .addOnSuccessListener { result ->
@@ -149,5 +157,5 @@ class NoteActivity : AppCompatActivity() {
                     data.add(memo)
                 }
             }
-    }
+    }*/
 }

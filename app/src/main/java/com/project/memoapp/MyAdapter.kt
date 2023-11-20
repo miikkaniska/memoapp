@@ -1,3 +1,4 @@
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -67,6 +68,8 @@ class MyAdapter(private val memoList: List<MemoData>) : RecyclerView.Adapter<MyA
                 UserManager.getInstance().setCurrentDocumentID(tempDocumentID)
                 Log.w("TESTING", "Current DocumentID: $tempDocumentID")
                 itemView.context.startActivity(intent)
+                // Finish the current activity
+                (itemView.context as? Activity)?.finish()
             }
         }
     }
