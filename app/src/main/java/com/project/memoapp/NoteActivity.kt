@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NoteActivity : AppCompatActivity() {
 
@@ -25,7 +28,7 @@ class NoteActivity : AppCompatActivity() {
     private lateinit var content : EditText
 
     private lateinit var createdDate : TextView
-    private lateinit var editedText : TextView
+    private lateinit var editedDate : TextView
     private lateinit var checkIfSharedText : TextView
 
     val db = Firebase.firestore
@@ -39,7 +42,7 @@ class NoteActivity : AppCompatActivity() {
 
         title = findViewById(R.id.memo_title)
         createdDate = findViewById(R.id.created_date_text)
-        editedText = findViewById(R.id.edited_date_text)
+        editedDate = findViewById(R.id.edited_date_text)
         checkIfSharedText = findViewById(R.id.check_shared_text)
         content = findViewById<EditText>(R.id.notes_content_text)
 
@@ -137,6 +140,38 @@ class NoteActivity : AppCompatActivity() {
 */
         title.text = documentSnapshot!!.getString("title")
         content.setText(documentSnapshot!!.getString("content"))
+
+        val shareList = documentSnapshot!!.get("sharedWith") as? List<String>
+
+        if (shareList != null && shareList.isNotEmpty()) {
+            val arrayData = shareList.joinToString(", ") // Join array elements into a string
+            checkIfSharedText.text = "Shared with: $arrayData"
+        } else {
+            checkIfSharedText.text = "Private"
+        }
+
+        val creationTime = documentSnapshot!!.getLong("creationTime")
+        //val lastEdited = documentSnapshot!!.getLong("lastEdited")
+
+        if (creationTime != null) {
+            val formattedTime = formatTime(creationTime)
+            createdDate.text = "Created: $formattedTime"
+        } else {
+            createdDate.text = "Time: Unknown"
+        }
+
+        //edited time doesn't seem to work atm in firestore
+       /* if (lastEdited != null) {
+            val formattedTime2 = formatTime(lastEdited)
+            editedDate.text = "Last edit: $formattedTime2"
+        } else {
+            editedDate.text = "Time: Unknown"
+        }*/
+    }
+    private fun formatTime(timeInMillis: Long): String {
+        val dateFormat = SimpleDateFormat("HH:mm dd.MM.yyyy ", Locale.getDefault())
+        val date = Date(timeInMillis)
+        return dateFormat.format(date)
     }
 
     override fun onBackPressed() {

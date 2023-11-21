@@ -64,18 +64,14 @@ class FirstActivity : AppCompatActivity() {
 
             // Or you can perform other tasks based on your application logic
             // For instance, displaying a Toast message
-            Toast.makeText(this, "New Memo Button Clicked", Toast.LENGTH_SHORT).show()
-
+            //Toast.makeText(this, "New Memo Button Clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, CreateMemoActivity::class.java)
+            finish()
+            startActivity(intent)
             // Or any other custom logic you want to execute
         }
 
         getUserMemos()
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent(this, CreateMemoActivity::class.java)
-        finish()
-        startActivity(intent)
     }
 
     private fun fetchDataFromFirestore() {
