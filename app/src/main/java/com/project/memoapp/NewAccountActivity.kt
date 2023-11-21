@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -140,6 +139,4 @@ class NewAccountActivity : AppCompatActivity() {
                     e -> Log.w(TAG, "Error writing document", e)
             }
     }
-
-
 }

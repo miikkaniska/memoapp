@@ -4,9 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
@@ -101,7 +99,6 @@ class CreateMemoActivity : AppCompatActivity() {
                 userManager.getUsername().toString()
             )
 
-
             // Hae "memos" -kokoelma Firestoresta
 
             val memosCollection = db.collection("memos").document(userManager.getUid().toString()).collection("userMemos").document()
@@ -128,5 +125,3 @@ class CreateMemoActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-

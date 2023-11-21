@@ -12,7 +12,6 @@ class UserManager private constructor() {
     private var currentSnapshot: QuerySnapshot? = null
     private var documentSnapshotList: ArrayList<DocumentSnapshot>? = null
 
-
     companion object {
         @Volatile
         private var instance: UserManager? = null

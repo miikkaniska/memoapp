@@ -1,6 +1,5 @@
 package com.project.memoapp
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -67,14 +66,6 @@ class NoteActivity : AppCompatActivity() {
         }
 
         saveNoteBtn.setOnClickListener{
-            //view -> startActivity(Intent(this, MainActivity::class.java)).apply {  }
-
-            /*
-            val docData = hashMapOf(
-                "title" to title.text.toString(),
-                "content" to content.text.toString(),
-            )
-            */
             val updates = hashMapOf<String, Any>(
                 "title" to title.text.toString(),
                 "content" to content.text.toString()
@@ -89,18 +80,7 @@ class NoteActivity : AppCompatActivity() {
                     onBackPressed()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-            /*
-            db.collection("data").document(title.text.toString())
-                .set(docData)
-                .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
-                    startActivity(intent)
-                }
-                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-            */
         }
-        //getFirebaseData()
-
         initializeNote()
     }
 
@@ -129,15 +109,6 @@ class NoteActivity : AppCompatActivity() {
             }
         }
 
-/*
-        for (documentSnapshot in tempSnapshot!!.documents) {
-            if (documentSnapshot.id == tempID) {
-                // Found the document with the matching ID
-                this.documentSnapshot = documentSnapshot
-                break // Break out of the loop since we found the document
-            }
-        }
-*/
         title.text = documentSnapshot!!.getString("title")
         content.setText(documentSnapshot!!.getString("content"))
 
@@ -159,14 +130,6 @@ class NoteActivity : AppCompatActivity() {
         } else {
             createdDate.text = "Time: Unknown"
         }
-
-        //edited time doesn't seem to work atm in firestore
-       /* if (lastEdited != null) {
-            val formattedTime2 = formatTime(lastEdited)
-            editedDate.text = "Last edit: $formattedTime2"
-        } else {
-            editedDate.text = "Time: Unknown"
-        }*/
     }
     private fun formatTime(timeInMillis: Long): String {
         val dateFormat = SimpleDateFormat("HH:mm dd.MM.yyyy ", Locale.getDefault())
@@ -194,45 +157,4 @@ class NoteActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
-
-   /* private fun getFirebaseData() {
-        db.collection("memos")
-            .get()
-            .addOnSuccessListener { result ->
-                val data: MutableList<MemoData> = mutableListOf()
-
-                for (document in result) {
-                    // Käsittele dokumentti ja hae halutut tiedot
-                    val title = document.getString("title") ?: ""
-                    val content = document.getString("content") ?: ""
-                    var sharedWith = arrayListOf("")
-                    val tempData = document.get("sharedWith")
-                    if(tempData != null){
-                        Log.d(ContentValues.TAG, "sharedWith content: " + tempData.toString())
-                        var x = tempData as ArrayList<String>
-                        for(i in x)
-                        {
-                            sharedWith.add(i)
-                        }
-                    }
-
-                    val createdBy = document.getString("createdBy") ?: ""
-
-                    val creationTime = if (document.contains("creationTime")) {
-                        document.getLong("creationTime") ?: System.currentTimeMillis()
-                    } else {
-                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
-                    }
-
-                    val lastEdited = if (document.contains("lastEdited")) {
-                        document.getLong("lastEdited") ?: System.currentTimeMillis()
-                    } else {
-                        System.currentTimeMillis() // Tai anna oletusaika, jos creationTime-kenttä ei ole saatavilla
-                    }
-
-                    val memo = MemoData(title, content, sharedWith, creationTime, lastEdited)
-                    data.add(memo)
-                }
-            }
-    }*/
 }

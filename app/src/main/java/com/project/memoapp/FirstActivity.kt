@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.project.memoapp.databinding.FragmentFirstBinding
 import MyAdapter
 import android.content.ContentValues
 import android.content.Intent
@@ -13,11 +12,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.coroutines.flow.combine
 
-//testing if changing from fragment to activity fixes problems with changing
 class FirstActivity : AppCompatActivity() {
 
 
@@ -37,10 +33,6 @@ class FirstActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MyAdapter(memoList) // Muutetaan adapteri käyttämään Firestoresta haettua listaa
         recyclerView.adapter = adapter
-
-        //fetchDataFromFirestore()
-
-
 
         //val username = intent.getStringExtra("USERNAME_EXTRA")
 
@@ -70,7 +62,6 @@ class FirstActivity : AppCompatActivity() {
             startActivity(intent)
             // Or any other custom logic you want to execute
         }
-
         getUserMemos()
     }
 
